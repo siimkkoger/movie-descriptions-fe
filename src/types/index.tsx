@@ -4,6 +4,7 @@ export interface MovieDto {
     rating: number;
     year: number;
     status: string;
+    categories: string;
 }
 
 export interface CategoryResponse {

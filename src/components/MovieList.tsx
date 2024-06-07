@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
 import { MovieDto, GetMovieTableResult, CategoryResponse } from '../types';
 import styles from './MovieList.module.css'; // Import CSS module
@@ -8,7 +9,7 @@ const MovieList: React.FC = () => {
     const navigate = useNavigate();
     const [movies, setMovies] = useState<MovieDto[]>([]);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<{ value: number, label: string }[]>([]);
     const [nameFilter, setNameFilter] = useState<string>('');
     const [eidrCodeFilter, setEidrCodeFilter] = useState<string>('');
     const [page, setPage] = useState(1);
@@ -31,7 +32,7 @@ const MovieList: React.FC = () => {
     useEffect(() => {
         // Fetch movies
         axiosInstance.post<GetMovieTableResult>('/api/movie/get-movies-table', {
-            categoryIds: selectedCategories,
+            categoryIds: selectedCategories.map(cat => cat.value),
             name: nameFilter,
             eidrCode: eidrCodeFilter,
             page,
@@ -60,9 +61,8 @@ const MovieList: React.FC = () => {
         }
     };
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => parseInt(option.value));
-        setSelectedCategories(selectedOptions);
+    const handleCategoryChange = (selectedOptions: any) => {
+        setSelectedCategories(selectedOptions || []);
         setPage(1); // Reset to first page when categories change
     };
 
@@ -76,11 +76,6 @@ const MovieList: React.FC = () => {
         setPage(1); // Reset to first page when eidr code filter changes
     };
 
-    const handleUnselectAll = () => {
-        setSelectedCategories([]);
-        setPage(1); // Reset to first page when categories change
-    };
-
     const handleSort = (column: 'RATING' | 'NAME') => {
         const newSortOrder = sortBy === column && sortOrder === 'asc' ? 'desc' : 'asc';
         setSortBy(column);
@@ -91,6 +86,11 @@ const MovieList: React.FC = () => {
     const handleRowClick = (eidrCode: string) => {
         navigate(`/edit/${encodeURIComponent(eidrCode)}`);
     };
+
+    const categoryOptions = categories.map(category => ({
+        value: category.id,
+        label: category.name
+    }));
 
     return (
         <div className={styles.container}>
@@ -115,21 +115,15 @@ const MovieList: React.FC = () => {
                     />
                     <div className={styles.categoryFilter}>
                         <label htmlFor="category-select">Filter by Category:</label>
-                        <select
+                        <Select
                             id="category-select"
-                            multiple
+                            isMulti
+                            options={categoryOptions}
+                            value={selectedCategories}
                             onChange={handleCategoryChange}
-                            value={selectedCategories.map(String)}
-                        >
-                            {categories.map(category => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
-                        <button onClick={handleUnselectAll} className={styles.unselectButton}>
-                            Unselect All
-                        </button>
+                            className={styles.multiSelect}
+                            classNamePrefix="multiSelect"
+                        />
                     </div>
                 </div>
             </div>
@@ -150,6 +144,7 @@ const MovieList: React.FC = () => {
                     </th>
                     <th>Year</th>
                     <th>Status</th>
+                    <th>Categories</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -161,6 +156,7 @@ const MovieList: React.FC = () => {
                         <td>{movie.rating}</td>
                         <td>{movie.year}</td>
                         <td>{movie.status}</td>
+                        <td>{movie.categories}</td>
                     </tr>
                 ))}
                 </tbody>

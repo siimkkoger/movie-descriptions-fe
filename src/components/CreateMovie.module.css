@@ -1,0 +1,112 @@
+/* CreateMovie.module.css */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #444;
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f39c12;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.formGroup input,
+.formGroup select {
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    width: 100%;
+}
+
+.formGroup input::placeholder {
+    color: #999;
+}
+
+.multiSelect {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+}
+
+.multiSelect__control {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.multiSelect__menu {
+    background-color: #333;
+    color: #fff;
+}
+
+.saveButton {
+    padding: 10px 20px;
+    border: 1px solid #555;
+    background-color: #f39c12;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.saveButton:hover {
+    background-color: #e67e22;
+}
+
+.message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.message.success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.message.error {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.loading {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+    animation: fadeInOut 1s infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
