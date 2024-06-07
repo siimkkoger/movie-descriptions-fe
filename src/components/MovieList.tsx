@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
-import {MovieDto, GetMovieTableResult, CategoryResponse} from '../types';
+import { MovieDto, GetMovieTableResult, CategoryResponse } from '../types';
 import styles from '../styles/MovieList.module.css';
-import {getCategories, getMovies} from "../api/moviesApi"; // Import CSS module
+import { getCategories, getMovies, deleteMovies } from "../api/moviesApi";
 
 const MovieList: React.FC = () => {
     const navigate = useNavigate();
     const [movies, setMovies] = useState<MovieDto[]>([]);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<{ value: number, label: string }[]>([]);
+    const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
     const [nameFilter, setNameFilter] = useState<string>('');
     const [eidrCodeFilter, setEidrCodeFilter] = useState<string>('');
     const [page, setPage] = useState(1);
@@ -92,6 +93,27 @@ const MovieList: React.FC = () => {
         navigate(`/edit/${encodeURIComponent(eidrCode)}`);
     };
 
+    const handleCheckboxChange = (eidrCode: string) => {
+        setSelectedMovies(prevSelected =>
+            prevSelected.includes(eidrCode)
+                ? prevSelected.filter(code => code !== eidrCode)
+                : [...prevSelected, eidrCode]
+        );
+    };
+
+    const handleBulkDelete = () => {
+        if (window.confirm('Are you sure you want to delete the selected movies?')) {
+            axiosInstance.delete('/api/movie/delete-movies', { data: { eidrCodes: selectedMovies } })
+                .then(() => {
+                    setMovies(prevMovies => prevMovies.filter(movie => !selectedMovies.includes(movie.eidrCode)));
+                    setSelectedMovies([]);
+                })
+                .catch(error => {
+                    console.error('Error deleting movies:', error);
+                });
+        }
+    };
+
     const categoryOptions = categories.map(category => ({
         value: category.id,
         label: category.name
@@ -102,6 +124,9 @@ const MovieList: React.FC = () => {
             <h1>Movies</h1>
             <button onClick={handleAddMovie} className={styles.addButton}>
                 Add New Movie
+            </button>
+            <button onClick={handleBulkDelete} className={styles.bulkDeleteButton} disabled={selectedMovies.length === 0}>
+                Delete Selected
             </button>
             <div className={styles.filtersSection}>
                 <div className={styles.filters}>
@@ -153,18 +178,26 @@ const MovieList: React.FC = () => {
                     <th>Year</th>
                     <th>Status</th>
                     <th>Categories</th>
+                    <th>Select for deletion</th>
                 </tr>
                 </thead>
                 <tbody>
                 {movies.map((movie, index) => (
-                    <tr key={movie.eidrCode} onClick={() => handleRowClick(movie.eidrCode)}>
+                    <tr key={movie.eidrCode}>
                         <td>{(page - 1) * pageSize + index + 1}</td>
-                        <td>{movie.eidrCode}</td>
-                        <td>{movie.name}</td>
-                        <td>{movie.rating}</td>
-                        <td>{movie.year}</td>
-                        <td>{movie.status}</td>
-                        <td>{movie.categories}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.eidrCode}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.name}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.rating}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.year}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.status}</td>
+                        <td onClick={() => handleRowClick(movie.eidrCode)}>{movie.categories}</td>
+                        <td>
+                            <input
+                                type="checkbox"
+                                checked={selectedMovies.includes(movie.eidrCode)}
+                                onChange={() => handleCheckboxChange(movie.eidrCode)}
+                            />
+                        </td>
                     </tr>
                 ))}
                 </tbody>
