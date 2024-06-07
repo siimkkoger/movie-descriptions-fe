@@ -62,6 +62,10 @@ const MovieList: React.FC = () => {
         }
     };
 
+    const handleAddMovie = () => {
+        navigate('/create-movie');
+    };
+
     const handleCategoryChange = (selectedOptions: any) => {
         setSelectedCategories(selectedOptions || []);
         setPage(1); // Reset to first page when categories change
@@ -96,6 +100,9 @@ const MovieList: React.FC = () => {
     return (
         <div className={styles.container}>
             <h1>Movies</h1>
+            <button onClick={handleAddMovie} className={styles.addButton}>
+                Add New Movie
+            </button>
             <div className={styles.filtersSection}>
                 <div className={styles.filters}>
                     <label htmlFor="name-filter">Filter by Name:</label>
