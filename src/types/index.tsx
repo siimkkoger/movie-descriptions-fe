@@ -55,3 +55,8 @@ export interface GetMovieResponse {
     movie: MovieDto;
     categories: CategoryResponse[];
 }
+
+export enum MovieStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE"
+}

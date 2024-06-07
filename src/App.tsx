@@ -4,6 +4,7 @@ import MovieList from './components/MovieList';
 import CreateMovie from './components/CreateMovie';
 import UpdateMovie from './components/UpdateMovie';
 import DeleteMovies from './components/DeleteMovies';
+import EditMovie from "./components/EditMovie";
 
 const App: React.FC = () => {
     return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
                 <Route path="/create-movie" element={<CreateMovie />} />
                 <Route path="/update-movie/:eidrCode" element={<UpdateMovie />} />
                 <Route path="/delete-movies" element={<DeleteMovies />} />
+                <Route path="/edit/:eidrCode" element={<EditMovie />} />
             </Routes>
         </Router>
     );

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 import { MovieDto, GetMovieTableResult, CategoryResponse } from '../types';
-import './MovieList.css';
+import styles from './MovieList.module.css'; // Import CSS module
 
 const MovieList: React.FC = () => {
+    const navigate = useNavigate();
     const [movies, setMovies] = useState<MovieDto[]>([]);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -86,11 +88,15 @@ const MovieList: React.FC = () => {
         setPage(1); // Reset to first page when sort changes
     };
 
+    const handleRowClick = (eidrCode: string) => {
+        navigate(`/edit/${encodeURIComponent(eidrCode)}`);
+    };
+
     return (
-        <div className="container">
+        <div className={styles.container}>
             <h1>Movies</h1>
-            <div className="filters-section">
-                <div className="filters">
+            <div className={styles.filtersSection}>
+                <div className={styles.filters}>
                     <label htmlFor="name-filter">Filter by Name:</label>
                     <input
                         id="name-filter"
@@ -107,7 +113,7 @@ const MovieList: React.FC = () => {
                         onChange={handleEidrCodeChange}
                         placeholder="Enter EIDR code"
                     />
-                    <div className="category-filter">
+                    <div className={styles.categoryFilter}>
                         <label htmlFor="category-select">Filter by Category:</label>
                         <select
                             id="category-select"
@@ -121,7 +127,7 @@ const MovieList: React.FC = () => {
                                 </option>
                             ))}
                         </select>
-                        <button onClick={handleUnselectAll} className="unselect-button">
+                        <button onClick={handleUnselectAll} className={styles.unselectButton}>
                             Unselect All
                         </button>
                     </div>
@@ -148,7 +154,7 @@ const MovieList: React.FC = () => {
                 </thead>
                 <tbody>
                 {movies.map((movie, index) => (
-                    <tr key={movie.eidrCode}>
+                    <tr key={movie.eidrCode} onClick={() => handleRowClick(movie.eidrCode)}>
                         <td>{(page - 1) * pageSize + index + 1}</td>
                         <td>{movie.eidrCode}</td>
                         <td>{movie.name}</td>
@@ -159,7 +165,7 @@ const MovieList: React.FC = () => {
                 ))}
                 </tbody>
             </table>
-            <div className="pagination">
+            <div className={styles.pagination}>
                 <button onClick={handlePreviousPage} disabled={page === 1}>
                     Previous
                 </button>
