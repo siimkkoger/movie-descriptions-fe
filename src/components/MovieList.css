@@ -16,11 +16,17 @@ h1 {
     color: #f39c12;
 }
 
+.filters-section {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
 .filters {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    margin-bottom: 20px;
     justify-content: space-between;
 }
 
@@ -45,13 +51,21 @@ h1 {
     width: 150px;
 }
 
+.category-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .unselect-button {
-    padding: 8px 16px;
+    padding: 5px 10px;
     border: 1px solid #555;
     background-color: #f39c12;
     color: #fff;
     cursor: pointer;
     border-radius: 4px;
+    margin-top: 5px;
+    font-size: 14px;
 }
 
 .unselect-button:hover {
@@ -74,6 +88,16 @@ th, td {
 th {
     background-color: #555;
     color: #fff;
+    cursor: pointer;
+}
+
+th button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
 }
 
 td {

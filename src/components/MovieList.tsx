@@ -12,6 +12,8 @@ const MovieList: React.FC = () => {
     const [page, setPage] = useState(1);
     const [pageSize] = useState(5);
     const [totalPages, setTotalPages] = useState(0);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortBy, setSortBy] = useState<'RATING' | 'NAME'>('RATING');
 
     useEffect(() => {
         // Fetch categories
@@ -32,8 +34,8 @@ const MovieList: React.FC = () => {
             eidrCode: eidrCodeFilter,
             page,
             pageSize,
-            orderBy: 'RATING',
-            direction: 'DESC'
+            orderBy: sortBy,
+            direction: sortOrder.toUpperCase()
         })
             .then(response => {
                 setMovies(response.data.movies);
@@ -42,7 +44,7 @@ const MovieList: React.FC = () => {
             .catch(error => {
                 console.error('Error fetching movies:', error);
             });
-    }, [page, pageSize, selectedCategories, nameFilter, eidrCodeFilter]);
+    }, [page, pageSize, selectedCategories, nameFilter, eidrCodeFilter, sortBy, sortOrder]);
 
     const handleNextPage = () => {
         if (page < totalPages) {
@@ -77,50 +79,69 @@ const MovieList: React.FC = () => {
         setPage(1); // Reset to first page when categories change
     };
 
+    const handleSort = (column: 'RATING' | 'NAME') => {
+        const newSortOrder = sortBy === column && sortOrder === 'asc' ? 'desc' : 'asc';
+        setSortBy(column);
+        setSortOrder(newSortOrder);
+        setPage(1); // Reset to first page when sort changes
+    };
+
     return (
         <div className="container">
             <h1>Movies</h1>
-            <div className="filters">
-                <label htmlFor="name-filter">Filter by Name:</label>
-                <input
-                    id="name-filter"
-                    type="text"
-                    value={nameFilter}
-                    onChange={handleNameChange}
-                    placeholder="Enter movie name"
-                />
-                <label htmlFor="eidr-code-filter">Filter by EIDR Code:</label>
-                <input
-                    id="eidr-code-filter"
-                    type="text"
-                    value={eidrCodeFilter}
-                    onChange={handleEidrCodeChange}
-                    placeholder="Enter EIDR code"
-                />
-                <label htmlFor="category-select">Filter by Category:</label>
-                <select
-                    id="category-select"
-                    multiple
-                    onChange={handleCategoryChange}
-                    value={selectedCategories.map(String)}
-                >
-                    {categories.map(category => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
-                <button onClick={handleUnselectAll} className="unselect-button">
-                    Unselect All
-                </button>
+            <div className="filters-section">
+                <div className="filters">
+                    <label htmlFor="name-filter">Filter by Name:</label>
+                    <input
+                        id="name-filter"
+                        type="text"
+                        value={nameFilter}
+                        onChange={handleNameChange}
+                        placeholder="Enter movie name"
+                    />
+                    <label htmlFor="eidr-code-filter">Filter by EIDR Code:</label>
+                    <input
+                        id="eidr-code-filter"
+                        type="text"
+                        value={eidrCodeFilter}
+                        onChange={handleEidrCodeChange}
+                        placeholder="Enter EIDR code"
+                    />
+                    <div className="category-filter">
+                        <label htmlFor="category-select">Filter by Category:</label>
+                        <select
+                            id="category-select"
+                            multiple
+                            onChange={handleCategoryChange}
+                            value={selectedCategories.map(String)}
+                        >
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={handleUnselectAll} className="unselect-button">
+                            Unselect All
+                        </button>
+                    </div>
+                </div>
             </div>
             <table>
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>EIDR Code</th>
-                    <th>Name</th>
-                    <th>Rating</th>
+                    <th>
+                        <button onClick={() => handleSort('NAME')}>
+                            Name {sortBy === 'NAME' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+                        </button>
+                    </th>
+                    <th>
+                        <button onClick={() => handleSort('RATING')}>
+                            Rating {sortBy === 'RATING' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+                        </button>
+                    </th>
                     <th>Year</th>
                     <th>Status</th>
                 </tr>
