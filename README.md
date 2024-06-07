@@ -13,19 +13,17 @@ The **Movie Descriptions Frontend** is a web application that allows users to se
 - [Additional Notes](#additional-notes)
 
 ## Features
-- Create Movie: Add a new movie with specific details and associated categories.
-- Update Movie: Modify the details of an existing movie.
-- Delete Movie: Remove a movie from the database.
-- Fetch Movies: Retrieve details of movies with optional filtering and pagination.
-- Fetch Categories: Get a list of all available categories.
-
-## Technology Stack
-- React: JavaScript library for building user interfaces.
-- TypeScript: Typed superset of JavaScript.
-- Axios: Promise-based HTTP client for making API requests.
-- React Router: Library for routing in React applications.
-- React Select: Flexible select input control for React.
-- CSS Modules: Scoped CSS for styling components.
+-  The user has two views:
+   -  Movie overview in table format
+   -  Add new movie view
+-  The user can add new movies.
+   -  It is possible to select categories from all predefined categories
+-  The user is shown up to 5 movies at a time in the table. The table is paginated.
+-  The user can search for movies by name and EIDR code.
+-  The user can filter movies by category.
+-  The user can sort movies by rating and name.
+-  The user can activate and deactivate movies (status).
+-  The user can delete multiple movies from the system completely.
 
 ## Getting Started
 ### Prerequisites
