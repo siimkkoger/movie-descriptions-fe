@@ -66,3 +66,5 @@ src/
 ## Additional Notes
 - Ensure that the backend server is running on http://localhost:8080 before starting the frontend application to avoid any API request issues.
 - For detailed API documentation, visit the Swagger UI at http://localhost:8080/swagger-ui.html when the backend server is running.
+
+![alt text](https://github.com/siimkkoger/movie-descriptions-fe/examples/image_create_movie.png?raw=true)
