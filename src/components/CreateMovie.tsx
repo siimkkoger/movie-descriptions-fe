@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import {CategoryResponse, CreateMovieRequest, MovieStatus} from '../types';
-import styles from './CreateMovie.module.css'; // Import CSS module
+import styles from '../styles/CreateMovie.module.css'; // Import CSS module
 import {createMovie, getCategories} from '../api/moviesApi';
 
 const CreateMovie: React.FC = () => {

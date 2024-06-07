@@ -10,7 +10,6 @@ The **Movie Descriptions Frontend** is a web application that allows users to se
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Getting Started](#getting-started)
-- [API Endpoints](#api-endpoints)
 
 ## Features
 - Create Movie: Add a new movie with specific details and associated categories.
@@ -26,3 +25,43 @@ The **Movie Descriptions Frontend** is a web application that allows users to se
 - React Router: Library for routing in React applications.
 - React Select: Flexible select input control for React.
 - CSS Modules: Scoped CSS for styling components.
+
+## Getting Started
+### Prerequisites
+- Node.js (v14 or later)
+- npm (v6 or later) or yarn (v1.22 or later)
+
+### Installation
+1. Clone the repository.
+   ```sh
+   git clone https://github.com/your-username/movie-descriptions-frontend.git
+   cd movie-descriptions-frontend
+   ```
+   
+2. Install dependencies.
+   ```sh
+    npm install
+    ```
+
+### Project Structure
+The project structure is as follows:
+```
+src/
+|-- api/
+|   |-- moviesApi.ts       # API calls for movies and categories
+|-- components/
+|   |-- CreateMovie.tsx    # Component for creating a movie
+|   |-- DeleteMovies.tsx   # Component for deleting movies
+|   |-- EditMovie.tsx      # Component for editing a movie
+|   |-- MovieForm.tsx      # Form component used in Create and Edit movie
+|   |-- MovieList.tsx      # Component for displaying a list of movies
+|-- types/
+|   |-- index.ts           # TypeScript types
+|-- styles/
+|   |-- CreateMovie.module.css  # CSS module for CreateMovie component
+|   |-- EditMovie.module.css    # CSS module for EditMovie component
+|   |-- MovieList.module.css    # CSS module for MovieList component
+|-- App.tsx                # Main application component
+|-- index.tsx              # Entry point for the React application
+```
+

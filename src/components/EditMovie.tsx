@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
 import { MovieDto, CategoryResponse, UpdateMovieRequest, MovieStatus } from '../types';
-import styles from './EditMovie.module.css';
+import styles from '../styles/EditMovie.module.css';
 import { getCategories, updateMovie, deleteMovies } from "../api/moviesApi"; // Import CSS module
 
 interface GetMovieResponse {

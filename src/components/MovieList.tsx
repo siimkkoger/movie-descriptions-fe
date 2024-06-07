@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
 import {MovieDto, GetMovieTableResult, CategoryResponse} from '../types';
-import styles from './MovieList.module.css';
+import styles from '../styles/MovieList.module.css';
 import {getCategories, getMovies} from "../api/moviesApi"; // Import CSS module
 
 const MovieList: React.FC = () => {
