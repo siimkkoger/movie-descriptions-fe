@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
-import axiosInstance from '../axiosConfig';
-import { CategoryResponse, CreateMovieRequest, MovieStatus } from '../types';
+import {CategoryResponse, CreateMovieRequest, MovieStatus} from '../types';
 import styles from './CreateMovie.module.css'; // Import CSS module
+import {createMovie, getCategories} from '../api/moviesApi';
 
 const CreateMovie: React.FC = () => {
     const navigate = useNavigate();
     const [categories, setCategories] = useState<CategoryResponse[]>([]); // Initialize with an empty array
     const [selectedCategories, setSelectedCategories] = useState<{ value: number, label: string }[]>([]);
-    const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' | '' }>({ text: '', type: '' });
+    const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' | '' }>({text: '', type: ''});
     const [loading, setLoading] = useState<boolean>(false);
     const [movieData, setMovieData] = useState({
         eidrCode: '',
@@ -21,7 +21,7 @@ const CreateMovie: React.FC = () => {
 
     useEffect(() => {
         // Fetch categories
-        axiosInstance.get<CategoryResponse[]>('/api/movie/get-categories')
+        getCategories()
             .then(response => {
                 setCategories(response.data);
             })
@@ -31,7 +31,7 @@ const CreateMovie: React.FC = () => {
     }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-        setMovieData({ ...movieData, [e.target.name]: e.target.value });
+        setMovieData({...movieData, [e.target.name]: e.target.value});
     };
 
     const handleCategoryChange = (selectedOptions: any) => {
@@ -44,9 +44,9 @@ const CreateMovie: React.FC = () => {
             categories: selectedCategories.map(cat => cat.value)
         };
 
-        axiosInstance.post('/api/movie/create-movie', createRequest)
+        createMovie(createRequest)
             .then(() => {
-                setMessage({ text: 'Movie created successfully!', type: 'success' });
+                setMessage({text: 'Movie created successfully!', type: 'success'});
                 setLoading(true);
                 setTimeout(() => {
                     setLoading(false);
@@ -54,7 +54,7 @@ const CreateMovie: React.FC = () => {
                 }, 2000); // Redirect after 2 seconds
             })
             .catch(error => {
-                setMessage({ text: 'Error creating movie. Please try again.', type: 'error' });
+                setMessage({text: 'Error creating movie. Please try again.', type: 'error'});
                 console.error('Error creating movie:', error);
             });
     };

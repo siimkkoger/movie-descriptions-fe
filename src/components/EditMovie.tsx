@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
 import { MovieDto, CategoryResponse, UpdateMovieRequest, MovieStatus } from '../types';
-import styles from './EditMovie.module.css'; // Import CSS module
+import styles from './EditMovie.module.css';
+import {getCategories, updateMovie} from "../api/moviesApi"; // Import CSS module
 
 interface GetMovieResponse {
     movie: MovieDto;
@@ -34,7 +35,7 @@ const EditMovie: React.FC = () => {
             });
 
         // Fetch categories
-        axiosInstance.get<CategoryResponse[]>('/api/movie/get-categories')
+        getCategories()
             .then(response => {
                 setCategories(response.data);
             })
@@ -63,7 +64,7 @@ const EditMovie: React.FC = () => {
                 status: movie.status,
                 categories: selectedCategories.map(cat => cat.value)
             };
-            axiosInstance.put('/api/movie/update-movie', updateRequest)
+            updateMovie(updateRequest)
                 .then(() => {
                     setMessage({ text: 'Movie updated successfully!', type: 'success' });
                     setLoading(true);

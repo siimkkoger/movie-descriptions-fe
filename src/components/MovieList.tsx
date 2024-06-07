@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
-import { MovieDto, GetMovieTableResult, CategoryResponse } from '../types';
-import styles from './MovieList.module.css'; // Import CSS module
+import {MovieDto, GetMovieTableResult, CategoryResponse} from '../types';
+import styles from './MovieList.module.css';
+import {getCategories, getMovies} from "../api/moviesApi"; // Import CSS module
 
 const MovieList: React.FC = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const MovieList: React.FC = () => {
 
     useEffect(() => {
         // Fetch categories
-        axiosInstance.get<CategoryResponse[]>('/api/movie/get-categories')
+        getCategories()
             .then(response => {
                 setCategories(response.data);
             })
@@ -31,7 +32,7 @@ const MovieList: React.FC = () => {
 
     useEffect(() => {
         // Fetch movies
-        axiosInstance.post<GetMovieTableResult>('/api/movie/get-movies-table', {
+        getMovies({
             categoryIds: selectedCategories.map(cat => cat.value),
             name: nameFilter,
             eidrCode: eidrCodeFilter,
