@@ -4,7 +4,7 @@ import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
 import { MovieDto, CategoryResponse, UpdateMovieRequest, MovieStatus } from '../types';
 import styles from './EditMovie.module.css';
-import {getCategories, updateMovie} from "../api/moviesApi"; // Import CSS module
+import { getCategories, updateMovie, deleteMovies } from "../api/moviesApi"; // Import CSS module
 
 interface GetMovieResponse {
     movie: MovieDto;
@@ -80,6 +80,24 @@ const EditMovie: React.FC = () => {
         }
     };
 
+    const handleDelete = () => {
+        if (window.confirm('Are you sure you want to delete this movie?')) {
+            axiosInstance.delete('/api/movie/delete-movies', { data: { eidrCodes: [decodedEidrCode] } })
+                .then(() => {
+                    setMessage({ text: 'Movie deleted successfully!', type: 'success' });
+                    setLoading(true);
+                    setTimeout(() => {
+                        setLoading(false);
+                        navigate('/');
+                    }, 2000); // Redirect after 2 seconds
+                })
+                .catch(error => {
+                    setMessage({ text: 'Error deleting movie. Please try again.', type: 'error' });
+                    console.error('Error deleting movie:', error);
+                });
+        }
+    };
+
     if (!movie) return <div>Loading...</div>;
 
     const categoryOptions = categories.map(category => ({
@@ -144,13 +162,16 @@ const EditMovie: React.FC = () => {
                     classNamePrefix="multiSelect"
                 />
             </div>
-            <button onClick={handleSave} className={styles.saveButton}>Save</button>
+            <div className={styles.buttonContainer}>
+                <button onClick={handleSave} className={styles.saveButton}>Save</button>
+                <button onClick={handleDelete} className={styles.deleteButton}>Delete</button>
+            </div>
             {message.text && (
                 <div className={`${styles.message} ${message.type === 'success' ? styles.success : styles.error}`}>
                     {message.text}
                 </div>
             )}
-            {loading && <div className={styles.loading}>Saving movie...</div>}
+            {loading && <div className={styles.loading}>Processing...</div>}
         </div>
     );
 };
