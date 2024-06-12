@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import {CategoryResponse, CreateMovieRequest, MovieStatus} from '../types';
-import styles from '../styles/CreateMovie.module.css'; // Import CSS module
+import styles from '../styles/CreateMovie.module.css';
 import {createMovie, getCategories} from '../api/moviesApi';
 
 const CreateMovie: React.FC = () => {
     const navigate = useNavigate();
-    const [categories, setCategories] = useState<CategoryResponse[]>([]); // Initialize with an empty array
+    const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<{ value: number, label: string }[]>([]);
     const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' | '' }>({text: '', type: ''});
     const [loading, setLoading] = useState<boolean>(false);

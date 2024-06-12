@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
-import { MovieDto, GetMovieTableResult, CategoryResponse } from '../types';
+import {MovieDto, CategoryResponse} from '../types';
 import styles from '../styles/MovieList.module.css';
-import { getCategories, getMovies, deleteMovies } from "../api/moviesApi";
+import {getCategories, getMovies} from "../api/moviesApi";
 
 const MovieList: React.FC = () => {
     const navigate = useNavigate();
@@ -69,24 +69,24 @@ const MovieList: React.FC = () => {
 
     const handleCategoryChange = (selectedOptions: any) => {
         setSelectedCategories(selectedOptions || []);
-        setPage(1); // Reset to first page when categories change
+        setPage(1);
     };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNameFilter(e.target.value);
-        setPage(1); // Reset to first page when name filter changes
+        setPage(1);
     };
 
     const handleEidrCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEidrCodeFilter(e.target.value);
-        setPage(1); // Reset to first page when eidr code filter changes
+        setPage(1);
     };
 
     const handleSort = (column: 'RATING' | 'NAME') => {
         const newSortOrder = sortBy === column && sortOrder === 'asc' ? 'desc' : 'asc';
         setSortBy(column);
         setSortOrder(newSortOrder);
-        setPage(1); // Reset to first page when sort changes
+        setPage(1);
     };
 
     const handleRowClick = (eidrCode: string) => {
@@ -103,10 +103,11 @@ const MovieList: React.FC = () => {
 
     const handleBulkDelete = () => {
         if (window.confirm('Are you sure you want to delete the selected movies?')) {
-            axiosInstance.delete('/api/movie/delete-movies', { data: { eidrCodes: selectedMovies } })
+            axiosInstance.delete('/api/movie/delete-movies', {data: {eidrCodes: selectedMovies}})
                 .then(() => {
                     setMovies(prevMovies => prevMovies.filter(movie => !selectedMovies.includes(movie.eidrCode)));
                     setSelectedMovies([]);
+                    setPage(1);
                 })
                 .catch(error => {
                     console.error('Error deleting movies:', error);
@@ -125,7 +126,8 @@ const MovieList: React.FC = () => {
             <button onClick={handleAddMovie} className={styles.addButton}>
                 Add New Movie
             </button>
-            <button onClick={handleBulkDelete} className={styles.bulkDeleteButton} disabled={selectedMovies.length === 0}>
+            <button onClick={handleBulkDelete} className={styles.bulkDeleteButton}
+                    disabled={selectedMovies.length === 0}>
                 Delete Selected
             </button>
             <div className={styles.filtersSection}>

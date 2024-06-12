@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
 import Select from 'react-select';
 import axiosInstance from '../axiosConfig';
-import { MovieDto, CategoryResponse, UpdateMovieRequest, MovieStatus } from '../types';
+import {MovieDto, CategoryResponse, UpdateMovieRequest, MovieStatus} from '../types';
 import styles from '../styles/EditMovie.module.css';
-import { getCategories, updateMovie, deleteMovies } from "../api/moviesApi"; // Import CSS module
+import {getCategories, updateMovie} from "../api/moviesApi";
 
 interface GetMovieResponse {
     movie: MovieDto;
@@ -12,22 +12,22 @@ interface GetMovieResponse {
 }
 
 const EditMovie: React.FC = () => {
-    const { eidrCode } = useParams<{ eidrCode: string }>();
+    const {eidrCode} = useParams<{ eidrCode: string }>();
     const navigate = useNavigate();
     const [movie, setMovie] = useState<MovieDto | null>(null);
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<{ value: number, label: string }[]>([]);
-    const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' | '' }>({ text: '', type: '' });
+    const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' | '' }>({text: '', type: ''});
     const [loading, setLoading] = useState<boolean>(false);
     const decodedEidrCode = decodeURIComponent(eidrCode ? eidrCode : '');
 
     useEffect(() => {
         // Fetch movie details
-        axiosInstance.get<GetMovieResponse>(`/api/movie/get-movie`, { params: { eidrCode: decodedEidrCode } })
+        axiosInstance.get<GetMovieResponse>(`/api/movie/get-movie`, {params: {eidrCode: decodedEidrCode}})
             .then(response => {
                 const movieData = response.data.movie;
                 setMovie(movieData);
-                const selectedCategories = response.data.categories.map(cat => ({ value: cat.id, label: cat.name }));
+                const selectedCategories = response.data.categories.map(cat => ({value: cat.id, label: cat.name}));
                 setSelectedCategories(selectedCategories);
             })
             .catch(error => {
@@ -46,7 +46,7 @@ const EditMovie: React.FC = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         if (movie) {
-            setMovie({ ...movie, [e.target.name]: e.target.value });
+            setMovie({...movie, [e.target.name]: e.target.value});
         }
     };
 
@@ -66,15 +66,15 @@ const EditMovie: React.FC = () => {
             };
             updateMovie(updateRequest)
                 .then(() => {
-                    setMessage({ text: 'Movie updated successfully!', type: 'success' });
+                    setMessage({text: 'Movie updated successfully!', type: 'success'});
                     setLoading(true);
                     setTimeout(() => {
                         setLoading(false);
                         navigate('/');
-                    }, 2000); // Redirect after 2 seconds
+                    }, 500);
                 })
                 .catch(error => {
-                    setMessage({ text: 'Error updating movie. Please try again.', type: 'error' });
+                    setMessage({text: 'Error updating movie. Please try again.', type: 'error'});
                     console.error('Error updating movie:', error);
                 });
         }
@@ -82,17 +82,17 @@ const EditMovie: React.FC = () => {
 
     const handleDelete = () => {
         if (window.confirm('Are you sure you want to delete this movie?')) {
-            axiosInstance.delete('/api/movie/delete-movies', { data: { eidrCodes: [decodedEidrCode] } })
+            axiosInstance.delete('/api/movie/delete-movies', {data: {eidrCodes: [decodedEidrCode]}})
                 .then(() => {
-                    setMessage({ text: 'Movie deleted successfully!', type: 'success' });
+                    setMessage({text: 'Movie deleted successfully!', type: 'success'});
                     setLoading(true);
                     setTimeout(() => {
                         setLoading(false);
                         navigate('/');
-                    }, 2000); // Redirect after 2 seconds
+                    }, 500);
                 })
                 .catch(error => {
-                    setMessage({ text: 'Error deleting movie. Please try again.', type: 'error' });
+                    setMessage({text: 'Error deleting movie. Please try again.', type: 'error'});
                     console.error('Error deleting movie:', error);
                 });
         }

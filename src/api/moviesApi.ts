@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {
     MovieDto,
     GetMoviesFilter,
@@ -10,7 +10,6 @@ import {
     GetMovieTableResult
 } from '../types';
 
-// Create an axios instance
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080', // Use the backend server URL
     headers: {
